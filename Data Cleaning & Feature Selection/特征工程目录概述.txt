@@ -1,0 +1,98 @@
+特征工程
+
+来源：
+1.业务已经整理好各种特征数据，我们需要去找出适合我们问题需要的特征
+2.从业务特征中自己去寻找高级数据特征
+
+选择合适的特征：
+
+###############特征选择###############
+
+一、过滤法选择特征
+1.方差筛选：越大越有用。
+sklearn中的VarianceThreshold类可以很方便的完成这个工作。
+
+2.相关系数：主要用于输出连续值的监督学习算法中。分别计算所有训练集中各个特征与输出值之间的相关系数，设定一个阈值，选择相关系数较大的部分特征。
+
+3.假设检验：卡方检验，检验某个特征分布和输出值分布之间的相关性。（优先）
+sklearn的chi2类，得到所有特征的卡方值与显著性水平P临界值，按阈值选较大的特征
+
+F检验和t检验，它们都是使用假设检验的方法，
+只是使用的统计分布不是卡方分布，而是F分布和t分布而已。
+在sklearn中，有F检验的函数f_classif和f_regression
+
+4.互信息（信息增益）（优先）：即从信息熵的角度分析各个特征和输出值之间的关系评分。
+互信息值越大，说明该特征和输出值之间的相关性越大，越需要保留。
+sklearn中，mutual_info_classif(分类)和mutual_info_regression(回归)
+
+二、包装法选择特征(选择一个目标函数来一步步的筛选特征)from sklearn.feature_selection import RFE
+递归消除特征法:(recursive feature elimination,以下简称RFE)
+使用一个机器学习模型来进行多轮训练，每轮训练后，消除若干权值系数的对应的特征，再基于新的特征集进行下一轮训练。
+在sklearn中，可以使用RFE函数来选择特征。
+
+三、嵌入法选择特征 from sklearn.feature_selection import SelectFromModel
+它和RFE的区别是它不是通过不停的筛掉特征来进行训练，而是使用的都是特征全集
+在sklearn中，使用SelectFromModel函数来选择特征。
+
+L1正则化和L2正则化：去掉先变0的
+正则化惩罚项越大，那么模型的系数就会越小。
+当正则化惩罚项大到一定的程度的时候，部分特征系数会变成0；
+当正则化惩罚项继续增大到一定程度时，所有的特征系数都会趋于0。
+但是我们会发现一部分特征系数会更容易先变成0，这部分系数就是可以筛掉的。也就是说，我们选择特征系数较大的特征。
+常用的L1正则化和L2正则化来选择特征的基学习器是逻辑回归。也可以DT或GBDT。可以得到特征系数coef或者可以得到特征重要度(feature importances)的算法才可以做为嵌入法的基学习器。
+
+三、挖掘高级特征
+在第一次建立模型的时候，我们可以先不寻找高级特征，得到以后基准模型后，再寻找高级特征进行优化。
+
+若干项特征加和： 我们假设你希望根据每日销售额得到一周销售额的特征。你可以将最近的7天的销售额相加得到。
+若干项特征之差： 假设你已经拥有每周销售额以及每月销售额两项特征，可以求一周前一月内的销售额。
+若干项特征乘积： 假设你有商品价格和商品销量的特征，那么就可以得到销售额的特征。
+若干项特征除商： 假设你有每个用户的销售额和购买的商品件数，那么就是得到该用户平均每件商品的销售额。
+
+聚类的时候高级特征尽量少一点，分类回归的时候高级特征适度的多一点。（经验）
+
+##############特征处理##############
+
+一、缺失值处理：先看连续值还是离散值。
+连续值：均值or中位数填充
+离散值：出现频数最高的类别进行填充
+from sklearn.preprocessing import Imputer
+
+二、特殊处理
+1.时间特征：
+a.变连续变量：计算出所有样本的时间到某一个未来时间之间的数值差距，这样这个差距是UTC的时间差，从而将时间特征转化为连续值
+b.变离散变量：根据时间所在的年，月，日，星期几，小时数，将一个时间特征转化为若干个离散特征，这种方法在分析具有明显时间趋势的问题比较好用
+c.权重法：根据时间衰变给与权重
+
+2.地理特征：靠API解析
+
+3.离散变量连续化：线性回归，逻辑回归
+a.OneHotEncoder
+b.embedding(深度学习)tf.nn.embedding_lookup
+c.在自然语言处理中，用word2vec将词转化为词向量
+
+4.离散变量离散化（高中低）
+a.OneHotEncoder (常用)
+b.dummy coding
+
+5.连续变量离散化（可使特征变得高维稀疏，方便一些算法的处理。）
+a.常用通过阈值分组
+b.LR+GBDT(还没学)
+
+sklearn.GradientBoostingClassifier
+
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.preprocessing import OneHotEncoder
+X, y = make_classification(n_samples=10)  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
+gbc = GradientBoostingClassifier(n_estimators=2)
+one_hot = OneHotEncoder()
+gbc.fit(X_train, y_train)
+X_train_new = one_hot.fit_transform(gbc.apply(X_train)[:, :, 0])
+print (X_train_new.todense())
+
+
+
+
