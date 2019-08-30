@@ -281,13 +281,13 @@ if __name__ == "__main__":
     '''数据描述'''
     # month_order_amount(data)    # 每月用户支付金额
     # month_order_products(data)  # 每月用户购买商品数(订单数)
-    # scatter_2features(data,"user_id","payable_rmb_amount","buy_num") #查看销量和销售额的散点图
+    scatter_2features(data,"user_id","payable_rmb_amount","buy_num") #查看销量和销售额的散点图
     # hist_2features(data,"user_id","payable_rmb_amount","buy_num")
     # print("用户首次消费月份(每月新客数)")
     # print(data.groupby("user_id").month.min().value_counts())
     # print("用户末次消费月份：(末次消费)")
     # print(data.groupby('user_id').month.max().value_counts())
-    df_pivot = data.pivot_table(index='user_id', columns='month', values='date', aggfunc='count').fillna(0) # 主表
+    # df_pivot = data.pivot_table(index='user_id', columns='month', values='date', aggfunc='count').fillna(0) # 主表
     '''复购率:当月购买2次及以上为复购用户'''
     # FuGou(df_pivot) # 复购率
     # FuGou_compare(df_pivot) # 各月二次消费人数与总消费人数对比
@@ -303,8 +303,8 @@ if __name__ == "__main__":
     '''用户生命周期:定义第一次消费到最后一次为整个生命周期'''
     # life_time(data) # 生命周期
     '''留存率：第一次消费后有多少比率进行第二次消费'''
-    user_purchase_retention = retention(data)
+    # user_purchase_retention = retention(data)
     '''平均购买周期：用户两次购买之间的间隔'''
-    Buying_Cycle(user_purchase_retention)
+    # Buying_Cycle(user_purchase_retention)
 
     # print(data.shape)
