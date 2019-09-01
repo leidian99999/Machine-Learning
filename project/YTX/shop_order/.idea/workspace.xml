@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28e154d2-9f66-4f88-8b5a-e869ed509fd1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../impala取数专用.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../impala取数专用.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../如易行自营商城订单消费探索分析.ipynb" beforeDir="false" />
-    </list>
+    <list default="true" id="28e154d2-9f66-4f88-8b5a-e869ed509fd1" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
